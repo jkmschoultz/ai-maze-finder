@@ -51,8 +51,8 @@ if __name__ == "__main__":
             steps += 1
         for row in maze:
             print(' '.join(row))
-
-        print(str(len(maze[0])) + 'x' + str(len(maze)) + ' maze')
+        print(path)
+        print(str(len(maze)) + 'x' + str(len(maze[0])) + ' maze')
         print('Steps taken: ' + str(steps))
         print('Nodes visited: ' + str(nodes_visited))
         print('Time to load: ' + str(end_load-start_load) + ' seconds')
