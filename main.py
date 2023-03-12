@@ -1,8 +1,8 @@
 import time
 
-maze = []
-
-# Returns 2D array of maze loaded from file with 'filename' in mazes directory
+"""
+Returns 2D array of maze loaded from file with 'filename' in mazes directory.
+"""
 def load_maze(filename):
     with open("mazes/" + filename) as f:
         maze = []
@@ -11,7 +11,11 @@ def load_maze(filename):
                 maze.append(line.strip().split())
     return maze
 
-# Perform depth first search of a given maze from a start position
+"""
+Perform depth first search of a given maze from a start position.
+Returns tuple of style: (solution_path, total_nodes_visited)
+(None, None) if no solution found
+"""
 def dfs(maze, start):
     # Use set to keep track of all visited nodes
     visited = set()
@@ -19,11 +23,11 @@ def dfs(maze, start):
     stack = [(start, [start])]
     while stack != []:
         (x, y), path = stack.pop()
-        # Visit popped node from stack if not yet visited
+        # Visit node popped from stack if not yet visited
         if (x, y) not in visited:
             visited.add((x, y))
             if x == len(maze)-1:
-                # Return if end has been reached
+                # Return path and number of nodes visited if end has been reached
                 return path, len(visited)
 
             for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
@@ -32,18 +36,21 @@ def dfs(maze, start):
                 if 0 <= new_x < len(maze) and 0 <= new_y < len(maze[0]) \
                         and maze[new_x][new_y] != '#' and (new_x, new_y) not in visited:
                     stack.append(((new_x, new_y), path + [(new_x, new_y)]))
-    return None
+    return None, None
 
-# Save the solution found to a maze to a file that can be viewed 
+"""
+Save the solution found to a maze to a file that can be viewed.
+"""
 def save_result(filename, maze):
     with open("solutions/"+ filename, 'w') as f:
         for row in maze:
             f.write(' '.join(row) + '\n')
 
+
 if __name__ == "__main__":
     # Load maze
     start_load = time.time()
-    maze = load_maze("maze-VLarge.txt")
+    maze = load_maze("maze-Small.txt")
     end_load = time.time()
     
     #Find start of maze
@@ -60,15 +67,15 @@ if __name__ == "__main__":
         for x, y in path:
             maze[x][y] = '*'
             steps += 1
-        save_result('solution-VLarge.txt', maze)
+        save_result('solution-Small.txt', maze)
 
         # Print statistics
         print(path)
         print(str(len(maze[0])) + 'x' + str(len(maze)) + ' maze')
+        print('Total nodes visited: ' + str(nodes_visited))
         print('Steps in path: ' + str(steps))
-        print('Nodes visited: ' + str(nodes_visited))
         print('Time to load: ' + str(end_load-start_load) + ' seconds')
-        print('Execution time: ' + str(end_time-start_time) + ' seconds')
+        print('Search time: ' + str(end_time-start_time) + ' seconds')
 
     else:
         print('No path found')
