@@ -26,15 +26,15 @@ def dfs(maze, start):
         # Visit node popped from stack if not yet visited
         if (x, y) not in visited:
             visited.add((x, y))
-            if x == len(maze)-1:
+            if y == len(maze)-1:
                 # Return path and number of nodes visited if end has been reached
                 return path, len(visited)
 
             for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
                 new_x, new_y = x + dx, y + dy
                 # Add each possible path to stack
-                if 0 <= new_x < len(maze) and 0 <= new_y < len(maze[0]) \
-                        and maze[new_x][new_y] != '#' and (new_x, new_y) not in visited:
+                if 0 <= new_y < len(maze) and 0 <= new_x < len(maze[0]) \
+                        and maze[new_y][new_x] != '#' and (new_x, new_y) not in visited:
                     stack.append(((new_x, new_y), path + [(new_x, new_y)]))
     return None, None
 
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     end_load = time.time()
     
     #Find start of maze
-    start = (0, maze[0].index('-'))
+    start = (maze[0].index('-'), 0)
     steps = 0
 
     # Perform depth first search
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     if path:
         # Save maze solution to file
         for x, y in path:
-            maze[x][y] = '*'
+            maze[y][x] = '*'
             steps += 1
         save_result('solution-Small.txt', maze)
 
