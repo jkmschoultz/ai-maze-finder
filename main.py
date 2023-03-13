@@ -2,8 +2,8 @@ import time
 import math
 from queue import PriorityQueue
 
-MAZE_TO_LOAD = "maze-VLarge.txt"
-SAVE_MAZE_TO = "solution-VLarge.txt"
+MAZE_TO_LOAD = "maze-Easy.txt"
+SAVE_MAZE_TO = "solution-Easy.txt"
 
 """
 Returns 2D array of maze loaded from file with 'filename' in mazes directory.
