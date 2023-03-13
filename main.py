@@ -2,8 +2,10 @@ import time
 import math
 from queue import PriorityQueue
 
-MAZE_TO_LOAD = "maze-Easy.txt"
-SAVE_MAZE_TO = "solution-Easy.txt"
+# Name of file in 'mazes' directory to load maze from
+MAZE_TO_LOAD = "maze-VLarge.txt"
+# Name of file in 'solutions' to save found solution path in
+SAVE_MAZE_TO = "solution-VLarge.txt"
 
 """
 Returns 2D array of maze loaded from file with 'filename' in mazes directory.
@@ -51,10 +53,15 @@ def save_result(filename, maze):
         for row in maze:
             f.write(' '.join(row) + '\n')
 
+"""
+Perform an a star search of a given maze from a start position and a provided end position.
+Returns tuple of style: (solution_path, total_nodes_visited)
+(None, None) if no solution found
+"""
 def a_star_search(maze, start, end):
     # Use set to keep track of all visited nodes
     visited = set()
-    # An entry in the queue contains the priority, and a tuple of the current position and list of path taken
+    # An entry in the queue contains the priority and a tuple of the current position and list of path taken
     priority_queue = PriorityQueue()
     priority = math.sqrt((end[0] - start[0])**2 + (end[1] - start[1])**2)
     priority_queue.put((priority, (start, [start])))
@@ -71,12 +78,12 @@ def a_star_search(maze, start, end):
 
             for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
                 new_x, new_y = x + dx, y + dy
-                # Calculate priority of each possible path to take and add to queue
+                # Find each possible path to take from current node
                 if 0 <= new_y < len(maze) and 0 <= new_x < len(maze[0]) \
                         and maze[new_y][new_x] != '#' and (new_x, new_y) not in visited:
                     # Obtain goal node position
                     goal_x, goal_y = end
-                    # Calculate node priority based on distance from goal node
+                    # Calculate new node priority based on distance from goal node
                     priority = math.sqrt((goal_x - new_x)**2 + (goal_y - new_y)**2)
                     # Add to priority queue
                     data = ((new_x, new_y), path + [(new_x, new_y)])
