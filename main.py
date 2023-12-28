@@ -30,7 +30,7 @@ def dfs(maze, start):
     stack = [(start, [start])]
     while stack != []:
         (x, y), path = stack.pop()
-        # Visit node popped from stack if not yet visited
+        # Visit node popped from stack if not yet visited to avoid loops
         if (x, y) not in visited:
             visited.add((x, y))
             if y == len(maze)-1:
@@ -54,11 +54,11 @@ def save_result(filename, maze):
             f.write(' '.join(row) + '\n')
 
 """
-Perform an a star search of a given maze from a start position and a provided end position.
+Perform greedy search of a given maze from a start position and a provided end position.
 Returns tuple of style: (solution_path, total_nodes_visited)
 (None, None) if no solution found
 """
-def a_star_search(maze, start, end):
+def greedy_search(maze, start, end):
     # Use set to keep track of all visited nodes
     visited = set()
     # An entry in the queue contains the priority and a tuple of the current position and list of path taken
@@ -69,7 +69,7 @@ def a_star_search(maze, start, end):
     while not priority_queue.empty():
         # Get entry from queue with highest priority
         priority, ((x, y), path) = priority_queue.get()
-        # Visit node if not yet visited
+        # Visit node if not yet visited to avoid loops
         if (x, y) not in visited:
             visited.add((x, y))
             if y == len(maze)-1:
@@ -112,7 +112,7 @@ if __name__ == "__main__":
         for x, y in path:
             maze[y][x] = '.'
             steps += 1
-        save_result(SAVE_MAZE_TO, maze)
+        save_result('dfs-'+SAVE_MAZE_TO, maze)
 
         # Print statistics
         print('Path found: '+ str(path))
@@ -126,18 +126,20 @@ if __name__ == "__main__":
 
     print('\n\n\n')
 
-    # Reset maze for a star search
+    # Reset maze for greedy search
+    start_load = time.time()
     maze = load_maze(MAZE_TO_LOAD)
+    end_load = time.time()
     steps = 0
 
     # Find end of maze
     length = len(maze)-1
     end = (length, maze[length].index('-'))
 
-    # Perform A star search
+    # Perform greedy search
     print(str(len(maze[0])) + 'x' + str(len(maze)) + ' maze')
     start_time = time.time()
-    path, nodes_visited = a_star_search(maze, start, end)
+    path, nodes_visited = greedy_search(maze, start, end)
     end_time = time.time()
     
     if path:
@@ -145,7 +147,7 @@ if __name__ == "__main__":
         for x, y in path:
             maze[y][x] = '.'
             steps += 1
-        save_result('a-star-'+SAVE_MAZE_TO, maze)
+        save_result('greedy-'+SAVE_MAZE_TO, maze)
 
         # Print statistics
         print('Path found: ' + str(path))
